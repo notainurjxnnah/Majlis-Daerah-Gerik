@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Jabatan Dashboard</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="../assets/js/data.js"></script>
+  <style>
+    .surat-card { background:#fff; border-radius:12px; padding:16px; margin:10px 0; box-shadow:0 8px 20px rgba(0,0,0,0.08);}
+    button{padding:8px 12px;border:none;border-radius:6px;cursor:pointer;}
+    .btn-primary{background:#1F6AE1;color:white;}
+    .btn-primary:hover{background:#0B2C4D;}
+    .btn-back,.btn-forward{background:#ccc;margin:5px;}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Jabatan Dashboard</h1>
+    <div>
+      <button class="btn-back" onclick="history.back()">Back</button>
+      <button class="btn-forward" onclick="history.forward()">Forward</button>
+    </div>
+  </div>
+
+  <div id="suratContainer"></div>
+
+  <script>
+    const username = localStorage.getItem("username") || "Jabatan Saya"; // untuk contoh
+    const suratContainer = document.getElementById("suratContainer");
+
+    function statusClass(status){
+      switch(status){
+        case 'penting': return 'status-penting';
+        case 'tindakan': return 'status-tindakan';
+        case 'diminit': return 'status-diminit';
+        case 'selesai': return 'status-selesai';
+        default: return '';
+      }
+    }
+
+    function renderSurat(){
+      suratContainer.innerHTML = '';
+      // Filter surat untuk jabatan ini
+      const mySurat = suratList.filter(s=>s.jabatan_tujuan && s.jabatan_tujuan.includes(username) && s.status!=='selesai');
+      if(mySurat.length===0){ suratContainer.innerHTML='<p>Tiada surat untuk jabatan anda.</p>'; return; }
+
+      mySurat.forEach((s, idx)=>{
+        const card = document.createElement('div'); card.className='surat-card';
+        card.innerHTML=`
+          <h3>${s.rujukan} - ${s.tajuk}</h3>
+          <p>Tarikh: ${s.tarikh}</p>
+          <p>Status: <span class="${statusClass(s.status)}">${s.status || 'belum'}</span></p>
+          <div>
+            <h4>Ulasan SU:</h4>
+            <p>${s.ulasan_su || '-'}</p>
+          </div>
+          <button class="btn-primary" onclick="hantarLatihan(${suratList.indexOf(s)})">Hantar ke Latihan</button>
+        `;
+        suratContainer.appendChild(card);
+      });
+    }
+
+    function hantarLatihan(idx){
+      suratList[idx].ke_latihan = true;
+      suratList[idx].status = 'tindakan';
+      saveData();
+      alert('Surat dihantar ke Latihan!');
+      renderSurat();
+    }
+
+    renderSurat();
+  </script>
+</body>
+</html>
