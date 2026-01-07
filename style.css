@@ -1,0 +1,33 @@
+/* Global Reset */
+body, html { margin:0; padding:0; font-family: Arial, sans-serif; background:#f2f4f7; }
+
+/* Cards & Boxes */
+.card {
+  background:#fff;
+  border-radius:12px;
+  padding:16px;
+  margin:10px 0;
+  box-shadow:0 8px 20px rgba(0,0,0,0.08);
+}
+
+/* Header / Sidebar */
+.header, .sidebar { background:#0B2C4D; color:#fff; padding:16px; }
+
+/* Tabs */
+.tab-active { background:#1F6AE1; color:#fff; border-radius:8px; }
+.tab-content { display:none; }
+
+/* Buttons */
+button {
+  padding:10px 16px; border:none; border-radius:8px; cursor:pointer; font-weight:bold;
+}
+.btn-primary { background:#1F6AE1; color:#fff; }
+.btn-primary:hover { background:#0B2C4D; }
+.btn-warning { background:#FACC15; color:#000; }
+.btn-back, .btn-forward { background:#ccc; color:#000; margin:5px; }
+
+/* Status Colors */
+.status-penting { background:#f8d7da; color:#721c24; }
+.status-tindakan { background:#fff3cd; color:#856404; }
+.status-diminit { background:#d4edda; color:#155724; }
+.status-selesai { background:#d1ecf1; color:#0c5460; }
