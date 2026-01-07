@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Setiausaha Dashboard</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="../assets/js/data.js"></script>
+  <style>
+    .stats { display:flex; justify-content:space-around; margin-bottom:20px; }
+    .stat-card { flex:1; margin:0 10px; padding:20px; border-radius:12px; background:#fff; box-shadow:0 8px 20px rgba(0,0,0,0.08); text-align:center;}
+    .surat-card { background:#fff; border-radius:12px; padding:16px; margin:10px 0; box-shadow:0 8px 20px rgba(0,0,0,0.08);}
+    .jabatan-checkbox { display:flex; flex-wrap:wrap; }
+    .jabatan-checkbox label { flex:0 0 30%; margin:5px 0; }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Setiausaha Dashboard</h1>
+    <div>
+      <button class="btn-back" onclick="history.back()">Back</button>
+      <button class="btn-forward" onclick="history.forward()">Forward</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn tab-active" onclick="openTab('home')">Home</button>
+    <button class="tab-btn" onclick="openTab('minit')">Minit Surat</button>
+  </div>
+
+  <!-- HOME -->
+  <div id="home" class="tab-content" style="display:block;">
+    <div class="stats">
+      <div class="stat-card">
+        <h3>Jumlah Surat Hari Ini</h3>
+        <p id="jumlahHariIni">0</p>
+      </div>
+      <div class="stat-card">
+        <h3>Sudah Diminit</h3>
+        <p id="sudahDiminit">0</p>
+      </div>
+      <div class="stat-card">
+        <h3>Belum Diminit</h3>
+        <p id="belumDiminit">0</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- MINIT SURAT -->
+  <div id="minit" class="tab-content">
+    <div id="suratContainer"></div>
+  </div>
+
+  <script>
+    // TAB LOGIC
+    function openTab(tabId){
+      document.querySelectorAll('.tab-content').forEach(tc=>tc.style.display='none');
+      document.getElementById(tabId).style.display='block';
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('tab-active'));
+      event.currentTarget.classList.add('tab-active');
+    }
+
+    // UPDATE HOME STATISTICS
+    function updateHome(){
+      const today = new Date().toISOString().split('T')[0];
+      const suratHariIni = suratList.filter(s=>s.tarikh===today);
+      const sudah = suratHariIni.filter(s=>s.status_minit==='sudah').length;
+      const belum = suratHariIni.filter(s=>!s.status_minit || s.status_minit==='belum').length;
+      document.getElementById("jumlahHariIni").innerText = suratHariIni.length;
+      document.getElementById("sudahDiminit").innerText = sudah;
+      document.getElementById("belumDiminit").innerText = belum;
+    }
+    updateHome();
+
+    // MINIT SURAT LOGIC
+    let currentIndex = 0;
+    const suratContainer = document.getElementById("suratContainer");
+
+    function renderSurat(){
+      suratContainer.innerHTML = '';
+      const suratBelum = suratList.filter(s=>!s.status_minit || s.status_minit==='belum');
+      if(suratBelum.length===0){
+        suratContainer.innerHTML='<p>Tiada surat untuk diminit.</p>'; return;
+      }
+      if(currentIndex >= suratBelum.length) currentIndex=0;
+      const s = suratBelum[currentIndex];
+
+      const card = document.createElement('div'); card.className='surat-card';
+      card.innerHTML=`
+        <h3>${s.rujukan} - ${s.tajuk}</h3>
+        <p>Tarikh: ${s.tarikh}</p>
+        <p>Status: <span class="${statusClass(s.status)}">${s.status || 'belum'}</span></p>
+        <div>
+          <h4>Pilih Jabatan:</h4>
+          <div class="jabatan-checkbox">
+            ${senaraiJabatan.map(j=>`
+              <label><input type="checkbox" value="${j}"> ${j}</label>
+            `).join('')}
+          </div>
+        </div>
+        <div>
+          <h4>Ulasan:</h4>
+          <textarea id="ulasanSurat" rows="3" style="width:100%;"></textarea>
+        </div>
+        <button class="btn-primary" onclick="sendSurat(${currentIndex})">Send</button>
+        <button class="btn-warning" onclick="nextSurat()">Next Surat</button>
+      `;
+      suratContainer.appendChild(card);
+    }
+
+    function statusClass(status){
+      switch(status){
+        case 'penting': return 'status-penting';
+        case 'tindakan': return 'status-tindakan';
+        case 'diminit': return 'status-diminit';
+        case 'selesai': return 'status-selesai';
+        default: return '';
+      }
+    }
+
+    function nextSurat(){ currentIndex++; renderSurat(); }
+
+    function sendSurat(idx){
+      const suratBelum = suratList.filter(s=>!s.status_minit || s.status_minit==='belum');
+      const s = suratBelum[idx];
+      const checkboxes = suratContainer.querySelectorAll('.jabatan-checkbox input[type=checkbox]');
+      const selected = Array.from(checkboxes).filter(cb=>cb.checked).map(cb=>cb.value);
+      if(selected.length===0){ alert('Sila pilih sekurang-kurangnya satu jabatan'); return; }
+      const ulasan = document.getElementById('ulasanSurat').value;
+
+      // UPDATE SURAT
+      s.status_minit='sudah';
+      s.jabatan_tujuan = selected;
+      s.ulasan_su = ulasan;
+      saveData();
+      alert('Surat telah dihantar!');
+      updateHome();
+      nextSurat();
+    }
+
+    renderSurat();
+  </script>
+</body>
+</html>
