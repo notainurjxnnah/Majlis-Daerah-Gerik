@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Latihan Dashboard</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="../assets/js/data.js"></script>
+  <style>
+    .surat-card { background:#fff; border-radius:12px; padding:16px; margin:10px 0; box-shadow:0 8px 20px rgba(0,0,0,0.08);}
+    input{padding:6px; margin:5px 0; width:100%; border-radius:6px; border:1px solid #ccc;}
+    button{padding:8px 12px;border:none;border-radius:6px;cursor:pointer;}
+    .btn-primary{background:#1F6AE1;color:white;}
+    .btn-primary:hover{background:#0B2C4D;}
+    .btn-back,.btn-forward{background:#ccc;margin:5px;}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Latihan Dashboard</h1>
+    <div>
+      <button class="btn-back" onclick="history.back()">Back</button>
+      <button class="btn-forward" onclick="history.forward()">Forward</button>
+    </div>
+  </div>
+
+  <div id="suratContainer"></div>
+
+  <script>
+    const suratContainer = document.getElementById("suratContainer");
+
+    function statusClass(status){
+      switch(status){
+        case 'penting': return 'status-penting';
+        case 'tindakan': return 'status-tindakan';
+        case 'diminit': return 'status-diminit';
+        case 'selesai': return 'status-selesai';
+        default: return '';
+      }
+    }
+
+    function renderSurat(){
+      suratContainer.innerHTML = '';
+      const suratLatihan = suratList.filter(s=>s.ke_latihan && s.status!=='selesai');
+      if(suratLatihan.length===0){ suratContainer.innerHTML='<p>Tiada surat untuk diproses latihan.</p>'; return; }
+
+      suratLatihan.forEach((s, idx)=>{
+        const card = document.createElement('div'); card.className='surat-card';
+        card.innerHTML=`
+          <h3>${s.rujukan} - ${s.tajuk}</h3>
+          <p>Tarikh: ${s.tarikh}</p>
+          <p>Status: <span class="${statusClass(s.status)}">${s.status}</span></p>
+          <div>
+            <h4>Staf Terlibat:</h4>
+            <input type="text" id="staf${idx}" placeholder="Nama staf">
+          </div>
+          <button class="btn-primary" onclick="selesaiSurat(${suratList.indexOf(s)}, ${idx})">Selesai</button>
+        `;
+        suratContainer.appendChild(card);
+      });
+    }
+
+    function selesaiSurat(globalIdx, idx){
+      const stafInput = document.getElementById(`staf${idx}`).value.trim();
+      if(!stafInput){ alert('Sila isi nama staf terlibat'); return; }
+      suratList[globalIdx].staf_terlibat = stafInput;
+      suratList[globalIdx].status = 'selesai';
+      saveData();
+      alert('Surat telah selesai!');
+      renderSurat();
+    }
+
+    renderSurat();
+  </script>
+</body>
+</html>
