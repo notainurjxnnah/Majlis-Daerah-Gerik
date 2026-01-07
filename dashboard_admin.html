@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard - Sistem Surat</title>
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <script src="../assets/js/data.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    body{margin:0;font-family:Arial;background:#f2f4f7;}
+    .header{background:#0B2C4D;color:white;padding:16px;text-align:center;}
+    .tabs{display:flex;justify-content:center;margin:10px 0;}
+    .tab-btn{padding:10px 20px;margin:0 5px;border:none;border-radius:8px;cursor:pointer;background:#ccc;color:#000;}
+    .tab-btn.tab-active{background:#1F6AE1;color:white;}
+    .tab-content{display:none;padding:20px;}
+    .card{background:#fff;border-radius:12px;padding:16px;margin:10px 0;box-shadow:0 8px 20px rgba(0,0,0,0.08);}
+    input, select{padding:8px;margin:5px 0;border-radius:6px;border:1px solid #ccc;}
+    button{padding:8px 12px;border:none;border-radius:6px;cursor:pointer;}
+    .btn-primary{background:#1F6AE1;color:white;}
+    .btn-primary:hover{background:#0B2C4D;}
+    .btn-warning{background:#FACC15;color:#000;}
+    .btn-back,.btn-forward{background:#ccc;margin:5px;}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Admin Dashboard</h1>
+    <div>
+      <button class="btn-back" onclick="history.back()">Back</button>
+      <button class="btn-forward" onclick="history.forward()">Forward</button>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn tab-active" onclick="openTab('home')">Home</button>
+    <button class="tab-btn" onclick="openTab('masuk')">Surat Masuk</button>
+    <button class="tab-btn" onclick="openTab('keluar')">Surat Keluar</button>
+    <button class="tab-btn" onclick="openTab('cukai')">Ramalan Cukai</button>
+  </div>
+
+  <!-- TAB CONTENTS -->
+
+  <!-- 1. HOME -->
+  <div id="home" class="tab-content" style="display:block;">
+    <div class="card">
+      <h3>Statistik Surat</h3>
+      <div id="statistikSurat"></div>
+      <canvas id="chartSurat" height="150"></canvas>
+    </div>
+  </div>
+
+  <!-- 2. SURAT MASUK -->
+  <div id="masuk" class="tab-content">
+    <div class="card">
+      <h3>Tambah Surat Masuk</h3>
+      <input type="text" id="rujukanMasuk" placeholder="Rujukan">
+      <input type="date" id="tarikhMasuk">
+      <input type="text" id="tajukMasuk" placeholder="Tajuk Surat">
+      <select id="jabatanMasuk" multiple>
+        <!-- Populate from senaraiJabatan -->
+      </select>
+      <select id="urgencyMasuk">
+        <option value="penting">Penting</option>
+        <option value="tindakan">Dalam Tindakan</option>
+        <option value="diminit">Sudah Diminit</option>
+        <option value="selesai">Selesai</option>
+      </select>
+      <button class="btn-primary" onclick="tambahSurat('masuk')">Tambah Surat</button>
+    </div>
+  </div>
+
+  <!-- 3. SURAT KELUAR -->
+  <div id="keluar" class="tab-content">
+    <div class="card">
+      <h3>Tambah Surat Keluar</h3>
+      <input type="text" id="rujukanKeluar" placeholder="Rujukan">
+      <input type="date" id="tarikhKeluar">
+      <input type="text" id="tajukKeluar" placeholder="Tajuk Surat">
+      <select id="jabatanKeluar" multiple>
+        <!-- Populate from senaraiJabatan -->
+      </select>
+      <select id="urgencyKeluar">
+        <option value="penting">Penting</option>
+        <option value="tindakan">Dalam Tindakan</option>
+        <option value="diminit">Sudah Diminit</option>
+        <option value="selesai">Selesai</option>
+      </select>
+      <button class="btn-primary" onclick="tambahSurat('keluar')">Tambah Surat</button>
+    </div>
+  </div>
+
+  <!-- 4. RAMALAN CUKAI -->
+  <div id="cukai" class="tab-content">
+    <div class="card">
+      <h3>Ramalan Cukai</h3>
+      <input type="number" id="tahunCukai" placeholder="Tahun">
+      <input type="number" id="hasilCukai" placeholder="Jumlah Hasil (RM)">
+      <button class="btn-primary" onclick="tambahCukai()">Tambah Data</button>
+    </div>
+    <div class="card">
+      <canvas id="chartCukai" height="150"></canvas>
+    </div>
+  </div>
+
+  <script>
+    // TAB LOGIC
+    function openTab(tabId){
+      document.querySelectorAll('.tab-content').forEach(tc=>tc.style.display='none');
+      document.getElementById(tabId).style.display='block';
+      document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('tab-active'));
+      event.currentTarget.classList.add('tab-active');
+    }
+
+    // POPULATE JABATAN SELECT
+    const jabatanMasuk = document.getElementById("jabatanMasuk");
+    const jabatanKeluar = document.getElementById("jabatanKeluar");
+    senaraiJabatan.forEach(j=>{
+      const o1=document.createElement("option"); o1.value=j;o1.text=j;jabatanMasuk.add(o1);
+      const o2=document.createElement("option"); o2.value=j;o2.text=j;jabatanKeluar.add(o2);
+    });
+
+    // TAMBAH SURAT
+    function tambahSurat(type){
+      const rujukan = type==='masuk'?document.getElementById('rujukanMasuk').value:document.getElementById('rujukanKeluar').value;
+      const tarikh = type==='masuk'?document.getElementById('tarikhMasuk').value:document.getElementById('tarikhKeluar').value;
+      const tajuk = type==='masuk'?document.getElementById('tajukMasuk').value:document.getElementById('tajukKeluar').value;
+      const jabatanSelect = type==='masuk'?jabatanMasuk:jabatanKeluar;
+      const urgency = type==='masuk'?document.getElementById('urgencyMasuk').value:document.getElementById('urgencyKeluar').value;
+
+      const jabatanTujuan = Array.from(jabatanSelect.selectedOptions).map(o=>o.value);
+      if(!rujukan||!tarikh||!tajuk||jabatanTujuan.length===0){ alert("Sila lengkapkan semua medan"); return; }
+
+      suratList.push({
+        rujukan, tarikh, tajuk, jabatan_tujuan:jabatanTujuan,
+        status: urgency, type
+      });
+      saveData(); alert("Surat ditambah!"); location.reload();
+    }
+
+    // STATISTIK HOME
+    function updateStatistik(){
+      const masuk = suratList.filter(s=>s.type==='masuk').length;
+      const keluar = suratList.filter(s=>s.type==='keluar').length;
+      let html=`<p>Jumlah Surat Masuk: ${masuk}</p><p>Jumlah Surat Keluar: ${keluar}</p>`;
+      document.getElementById("statistikSurat").innerHTML=html;
+
+      // CHART
+      const dataJabatan = {};
+      senaraiJabatan.forEach(j=>dataJabatan[j]=0);
+      suratList.forEach(s=>s.jabatan_tujuan.forEach(j=>dataJabatan[j]++));
+      const ctx = document.getElementById('chartSurat').getContext('2d');
+      new Chart(ctx,{
+        type:'bar',
+        data:{
+          labels:Object.keys(dataJabatan),
+          datasets:[{label:'Bilangan Surat',data:Object.values(dataJabatan),backgroundColor:'#1F6AE1'}]
+        },
+        options:{responsive:true,maintainAspectRatio:false}
+      });
+    }
+    updateStatistik();
+
+    // RAMALAN CUKAI (simplified)
+    let cukaiData = JSON.parse(localStorage.getItem("cukaiData")) || [];
+    function tambahCukai(){
+      const tahun = document.getElementById("tahunCukai").value;
+      const hasil = document.getElementById("hasilCukai").value;
+      if(!tahun||!hasil){ alert("Sila lengkapkan"); return; }
+      cukaiData.push({tahun,hasil});
+      localStorage.setItem("cukaiData", JSON.stringify(cukaiData));
+      renderCukaiChart();
+    }
+    function renderCukaiChart(){
+      const ctx=document.getElementById("chartCukai").getContext('2d');
+      const labels=cukaiData.map(d=>d.tahun);
+      const data=cukaiData.map(d=>d.hasil);
+      new Chart(ctx,{
+        type:'line',
+        data:{labels,datasets:[{label:'Hasil Cukai (RM)',data,backgroundColor:'#1F6AE1',borderColor:'#0B2C4D',fill:false}]},
+        options:{responsive:true,maintainAspectRatio:false}
+      });
+    }
+    renderCukaiChart();
+  </script>
+</body>
+</html>
