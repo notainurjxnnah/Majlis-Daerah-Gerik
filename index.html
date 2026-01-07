@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <meta name="description" content="Sistem Pengurusan Surat Majlis Daerah Gerik">
+    <meta name="keywords" content="surat, pengurusan, gerik, majlis daerah">
+    <title>Sistem Pengurusan Surat - MD Gerik</title>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/responsive.css">
+    <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
+    <style>
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0B2C4D 0%, #1F6AE1 100%);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('assets/images/bg-pattern.svg') repeat;
+            opacity: 0.1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 1s ease;
+        }
+        
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+        
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            padding: 4rem 2rem;
+            background: #f8f9fa;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            transition: transform 0.3s ease;
+            text-align: center;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #1F6AE1;
+        }
+        
+        /* Stats Section */
+        .stats-section {
+            background: #0B2C4D;
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        
+        .stat-item h3 {
+            font-size: 2.5rem;
+            margin: 0;
+            color: #FACC15;
+        }
+        
+        /* CTA Section */
+        .cta-section {
+            padding: 4rem 2rem;
+            text-align: center;
+            background: linear-gradient(to right, #f8f9fa, #e9ecef);
+        }
+        
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+        
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .features-grid {
+                padding: 2rem 1rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="main-nav">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h2>📋 MD Gerik</h2>
+            </div>
+            <div class="nav-links">
+                <a href="#features">Ciri-ciri</a>
+                <a href="#about">Tentang</a>
+                <a href="#contact">Hubungi</a>
+                <a href="login.html" class="nav-login-btn">Log Masuk</a>
+            </div>
+            <button class="nav-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Sistem Pengurusan Surat Digital</h1>
+            <p class="hero-subtitle">
+                Platform bersepadu untuk pengurusan surat masuk, keluar dan ramalan cukai<br>
+                Majlis Daerah Gerik
+            </p>
+            <div class="cta-buttons">
+                <a href="login.html" class="btn btn-primary btn-large">
+                    🔐 Log Masuk Sekarang
+                </a>
+                <a href="#features" class="btn btn-outline btn-large">
+                    📖 Pelajari Lebih Lanjut
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Dashboard Interaktif</h3>
+            <p>Pemantauan masa nyata dengan carta dan statistik lengkap untuk semua jenis surat.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">🤝</div>
+            <h3>Kerjasama Jabatan</h3>
+            <p>Aliran kerja yang lancar antara 13 jabatan dengan sistem notifikasi automatik.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">📱</div>
+            <h3>Responsif Lengkap</h3>
+            <p>Berfungsi sempurna pada desktop, tablet dan telefon bimbit tanpa sebarang masalah.</p>
+        </div>
+        
+        <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <h3>Pantas & Efisien</h3>
+            <p>Proses surat dari penerimaan hingga selesai dalam masa yang minimum.</p>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats-section">
+        <h2>Statistik Sistem</h2>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <h3 id="stat-surat">0</h3>
+                <p>Surat Diproses</p>
+            </div>
+            <div class="stat-item">
+                <h3 id="stat-jabatan">13</h3>
+                <p>Jabatan Aktif</p>
+            </div>
+            <div class="stat-item">
+                <h3 id="stat-pengguna">4</h3>
+                <p>Jenis Pengguna</p>
+            </div>
+            <div class="stat-item">
+                <h3>24/7</h3>
+                <p>Sedia Bantu</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2>Sedia untuk Transformasi Digital?</h2>
+        <p>Mulakan pengurusan surat yang lebih efisien hari ini</p>
+        <div class="cta-buttons">
+            <a href="login.html" class="btn btn-primary btn-large">
+                🚀 Mula Sekarang
+            </a>
+            <a href="#contact" class="btn btn-outline">
+                📞 Hubungi Sokongan
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>MD Gerik Sistem Surat</h3>
+                <p>Sistem rasmi pengurusan surat Majlis Daerah Gerik</p>
+            </div>
+            <div class="footer-section">
+                <h3>Pautan Pantas</h3>
+                <a href="login.html">Log Masuk</a>
+                <a href="#features">Ciri-ciri</a>
+                <a href="#contact">Bantuan</a>
+            </div>
+            <div class="footer-section">
+                <h3>Hubungi Kami</h3>
+                <p>📧 support@mdgerik.gov.my</p>
+                <p>📞 05-791 1234</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 Majlis Daerah Gerik. Hak Cipta Terpelihara.</p>
+            <p>Versi: 2.0 | Dikemaskini: Disember 2024</p>
+        </div>
+    </footer>
+
+    <script src="assets/js/utils.js"></script>
+    <script>
+        // Animated counter for stats
+        function animateCounter(elementId, target) {
+            let current = 0;
+            const increment = target / 50;
+            const element = document.getElementById(elementId);
+            const timer = setInterval(() => {
+                current += increment;
+                if (current >= target) {
+                    current = target;
+                    clearInterval(timer);
+                }
+                element.textContent = Math.floor(current);
+            }, 30);
+        }
+
+        // Load stats from localStorage
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get actual data
+            const suratList = JSON.parse(localStorage.getItem('suratList')) || [];
+            const totalSurat = suratList.length;
+            
+            // Animate counters
+            animateCounter('stat-surat', totalSurat);
+            
+            // Mobile menu toggle
+            const navToggle = document.querySelector('.nav-toggle');
+            const navLinks = document.querySelector('.nav-links');
+            
+            navToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('show');
+                navToggle.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html>
