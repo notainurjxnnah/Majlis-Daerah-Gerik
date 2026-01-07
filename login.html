@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sistem Surat - Login</title>
+  <link rel="stylesheet" href="assets/css/style.css">
+  <style>
+    body{display:flex;justify-content:center;align-items:center;height:100vh;}
+    .login-box{
+      background:#fff;padding:40px;border-radius:12px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.08);
+      width:320px;text-align:center;
+    }
+    input, select{width:100%;padding:10px;margin:10px 0;border-radius:6px;border:1px solid #ccc;}
+    button{width:100%;padding:10px;border-radius:8px;border:none;background:#1F6AE1;color:#fff;font-weight:bold;}
+    button:hover{background:#0B2C4D;}
+  </style>
+</head>
+<body>
+  <div class="login-box">
+    <h2>Login Sistem Surat</h2>
+    <input type="text" id="username" placeholder="Username">
+    <select id="role">
+      <option value="">Pilih Peranan</option>
+      <option value="admin">Admin</option>
+      <option value="su">Setiausaha</option>
+      <option value="jabatan">Jabatan</option>
+      <option value="latihan">Latihan</option>
+    </select>
+    <button onclick="login()">Login</button>
+  </div>
+
+  <script src="assets/js/auth.js"></script>
+</body>
+</html>
